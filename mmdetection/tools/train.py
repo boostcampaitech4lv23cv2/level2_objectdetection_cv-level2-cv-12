@@ -54,7 +54,7 @@ def parse_args():
         default=0,
         help='id of gpu to use '
         '(only applicable to non-distributed training)')
-    parser.add_argument('--seed', type=int, default=42, help='random seed')
+    parser.add_argument('--seed', type=int, default=42, help='random seed') # default 42
     parser.add_argument(
         '--diff-seed',
         action='store_true',
@@ -62,7 +62,7 @@ def parse_args():
     parser.add_argument(
         '--deterministic',
         # action='store_true',
-        action='store_false',
+        action='store_false', # 호출되면 True
         help='whether to set deterministic options for CUDNN backend.')
 
     parser.add_argument(
