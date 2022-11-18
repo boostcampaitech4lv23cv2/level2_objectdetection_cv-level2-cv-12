@@ -6,7 +6,7 @@ log_config = dict(
         dict(type='TextLoggerHook'),
         dict(type='WandbLoggerHook', 
             interval=100,
-            init_kwargs={'project': 'Object Detection',
+            init_kwargs={'project': 'test',
                          'entity': 'cv12'})
         # dict(type='TensorboardLoggerHook')
     ])
