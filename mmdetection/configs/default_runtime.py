@@ -1,4 +1,6 @@
-checkpoint_config = dict(interval=1)
+work_dir = './work_dirs/eok' # save path 설정
+checkpoint_config = dict(interval=1) # 1에폭에 한번 저장
+
 # yapf:disable
 log_config = dict(
     interval=50,
@@ -6,7 +8,7 @@ log_config = dict(
         dict(type='TextLoggerHook'),
         dict(type='WandbLoggerHook', 
             interval=100,
-            init_kwargs={'project': 'Object Detection',
+            init_kwargs={'project': 'test',
                          'entity': 'cv12'})
         # dict(type='TensorboardLoggerHook')
     ])
