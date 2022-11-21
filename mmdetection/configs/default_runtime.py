@@ -1,15 +1,22 @@
-work_dir = './work_dirs/eok' # save path 설정
-checkpoint_config = dict(interval=1) # 1에폭에 한번 저장
+from datetime import datetime
+from pytz import timezone
 
+project_name = 'test'
+experiment_name = 'wandb setting' + datetime.now(timezone("Asia/Seoul")).strftime("(%m.%d %H:%M)")
+work_dir = './work_dirs/'+project_name+'/'+experiment_name # save path 설정
+
+checkpoint_config = dict(interval=1) # 1에폭에 한번 저장
 # yapf:disable
 log_config = dict(
     interval=50,
     hooks=[
         dict(type='TextLoggerHook'),
         dict(type='WandbLoggerHook', 
-            interval=100,
-            init_kwargs={'project': 'test',
-                         'entity': 'cv12'})
+            interval=100, # logging 하는 step
+            init_kwargs={ # wandb.init에 인자들
+                'project': project_name, 
+                'name' : experiment_name,
+                'entity': 'cv12'})
         # dict(type='TensorboardLoggerHook')
     ])
 # yapf:enable
