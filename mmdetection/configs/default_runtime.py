@@ -6,12 +6,6 @@ log_config = dict(
     interval=500,
     hooks=[
         dict(type='TextLoggerHook'),
-<<<<<<< HEAD
-        dict(type='WandbLoggerHook', 
-            interval=500,
-            init_kwargs={'project': 'Object Detection',
-                         'entity': 'cv12'})
-=======
         # dict(type='WandbLoggerHook', 
         #     interval=100,
         #     init_kwargs={'project': 'Object Detection',
@@ -22,7 +16,6 @@ log_config = dict(
             log_checkpoint=True,
             log_checkpoint_metadata=True,
             num_eval_images=100),
->>>>>>> 10af6669dcfce52c46c9b8c4725a56a5cff3f628
         # dict(type='TensorboardLoggerHook')
     ])
 # yapf:enable
