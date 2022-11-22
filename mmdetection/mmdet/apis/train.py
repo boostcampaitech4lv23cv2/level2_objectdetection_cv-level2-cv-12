@@ -193,7 +193,7 @@ def train_detector(model,
         cfg.lr_config,
         optimizer_config,
         cfg.checkpoint_config,
-        cfg.log_config, # wabdb log
+        cfg.log_config, # wandb log
         cfg.get('momentum_config', None),
         custom_hooks_config=cfg.get('custom_hooks', None))
 
