@@ -5,6 +5,9 @@ import os
 import os.path as osp
 import time
 import warnings
+from pathlib import Path
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 import mmcv
 import torch
