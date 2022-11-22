@@ -3,7 +3,7 @@ checkpoint_config = dict(interval=1) # 1에폭에 한번 저장
 
 # yapf:disable
 log_config = dict(
-    interval=50,
+    interval=500,
     hooks=[
         dict(type='TextLoggerHook'),
         # dict(type='WandbLoggerHook', 
