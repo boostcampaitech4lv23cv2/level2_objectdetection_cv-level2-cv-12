@@ -12,7 +12,7 @@ log_config = dict(
         #                  'entity': 'cv12'}),
         dict(type='MMDetWandbHook',
             init_kwargs={'project': 'Object Detection',
-                        'name' : 'mosaic_prob100',
+                        'name' : 'seok-test',
                         'entity' : 'cv12'},
             interval=100,
             log_checkpoint=True,
