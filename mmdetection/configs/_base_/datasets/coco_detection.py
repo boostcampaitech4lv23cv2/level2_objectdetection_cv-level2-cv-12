@@ -1,6 +1,9 @@
 # dataset settings
 dataset_type = 'CocoDataset'
-data_root = '../../dataset/'
+
+image_data_root = '/opt/ml/dataset'
+annotation_data_root = '/opt/ml/dataset/kfold/seed41/'
+
 img_norm_cfg = dict(
     mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375], to_rgb=True)
 train_pipeline = [
@@ -36,20 +39,20 @@ data = dict(
     workers_per_gpu=2,
     train=dict(
         type=dataset_type,
-        ann_file=data_root + 'train.json',
-        img_prefix=data_root,
+        ann_file=annotation_data_root + 'train_0.json',
+        img_prefix=image_data_root,
         classes=classes,
         pipeline=train_pipeline),
     val=dict(
         type=dataset_type,
-        ann_file=data_root + 'train.json',
-        img_prefix=data_root,
+        ann_file=annotation_data_root + 'val_0.json',
+        img_prefix=image_data_root,
         classes=classes,
         pipeline=test_pipeline),
     test=dict(
         type=dataset_type,
-        ann_file=data_root + 'train.json',
-        img_prefix=data_root,
+        ann_file=annotation_data_root + 'test.json',
+        img_prefix=image_data_root,
         classes=classes,
         pipeline=test_pipeline))
 evaluation = dict(interval=1, metric='bbox', classwise=True) # iou_thrs는 classwise에 적용이 안됨 <- 변경 불가
