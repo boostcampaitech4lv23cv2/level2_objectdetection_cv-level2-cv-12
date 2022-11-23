@@ -8,6 +8,8 @@ __pycache__/
 *.json
 *.jpeg
 
+mmdetection/configs/logger.py
+
 # C extensions
 *.so
 
