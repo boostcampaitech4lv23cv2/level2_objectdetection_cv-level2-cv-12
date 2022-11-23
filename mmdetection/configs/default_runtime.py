@@ -1,5 +1,5 @@
 project_name = 'inseo_test'
-experiment_name = 'baseline(more epoch)' 
+experiment_name = 'focal loss' 
 work_dir = './work_dirs/'+project_name+'/'+experiment_name # save path 설정
 #work_dir = './work_dirs/eok'
 
@@ -14,7 +14,7 @@ log_config = dict(
                         'name' : experiment_name,
                         'entity' : 'cv12'},
             interval=100, # Logging interval 
-            log_checkpoint=True, # Save the checkpoint at every checkpoint interval as W&B Artifacts
+            log_checkpoint=False, # Save the checkpoint at every checkpoint interval as W&B Artifacts
             log_checkpoint_metadata=True,  # Log the evaluation metrics computed on the validation data with the checkpoint
             num_eval_images=100, # The number of validation images to be logged.
             bbox_score_thr=0.3
