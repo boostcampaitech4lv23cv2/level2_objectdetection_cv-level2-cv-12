@@ -42,7 +42,8 @@ data = dict(
     train=dict(
         type=dataset_type,
         ann_file=[annotation_data_root + 'train_0.json', 
-                  pseudo_data_root],
+                  # pseudo_data_root
+                  ],
         img_prefix=image_data_root,
         classes=classes,
         pipeline=train_pipeline),
