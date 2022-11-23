@@ -12,11 +12,13 @@ log_config = dict(
         #                  'entity': 'cv12'}),
         dict(type='MMDetWandbHook',
             init_kwargs={'project': 'Object Detection',
+                        'name' : 'mosaic_prob100',
                         'entity' : 'cv12'},
-            interval=10,
+            interval=100,
             log_checkpoint=True,
             log_checkpoint_metadata=True,
-            num_eval_images=100),
+            num_eval_images=100,
+            bbox_score_thr=0.3),
         # dict(type='TensorboardLoggerHook')
     ])
 # yapf:enable
