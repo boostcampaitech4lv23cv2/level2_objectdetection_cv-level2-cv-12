@@ -1,5 +1,5 @@
 # optimizer
-learning_rate = 1e-3
+learning_rate = 1e-5
 optimizer = dict(type='Adam', lr=learning_rate, weight_decay=learning_rate*0.1)
 optimizer_config = dict(grad_clip=None)
 # learning policy
