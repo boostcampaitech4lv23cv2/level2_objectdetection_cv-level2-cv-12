@@ -1,26 +1,24 @@
-from datetime import datetime
-from pytz import timezone
-
-project_name = 'test'
-experiment_name = 'wandb setting' + datetime.now(timezone("Asia/Seoul")).strftime("(%m.%d %H:%M)")
+project_name = 'inseo_test'
+experiment_name = 'baseline(more epoch)' 
 work_dir = './work_dirs/'+project_name+'/'+experiment_name # save path 설정
 #work_dir = './work_dirs/eok'
 
 checkpoint_config = dict(interval=1) # 1에폭에 한번 저장
 # yapf:disable
 log_config = dict(
-    interval=500,
+    interval=100,
     hooks=[
         dict(type='TextLoggerHook'),
         dict(type='MMDetWandbHook',
-            init_kwargs={'project': 'Object Detection',
-                        'name' : 'experiment_name',
+            init_kwargs={'project': project_name,
+                        'name' : experiment_name,
                         'entity' : 'cv12'},
-            interval=10,
-            log_checkpoint=True,
-            log_checkpoint_metadata=True,
-            num_eval_images=100),
-        # dict(type='TensorboardLoggerHook')
+            interval=100, # Logging interval 
+            log_checkpoint=True, # Save the checkpoint at every checkpoint interval as W&B Artifacts
+            log_checkpoint_metadata=True,  # Log the evaluation metrics computed on the validation data with the checkpoint
+            num_eval_images=100, # The number of validation images to be logged.
+            bbox_score_thr=0.3
+            ),
     ])
 # yapf:enable
 custom_hooks = [dict(type='NumClassCheckHook')]
