@@ -1,3 +1,16 @@
+## How to train
+``` shell
+python train.py --workers 8 --device 0 --epochs 100 --batch-size 8 --data data/coco.yaml --img 640 640 --cfg {config_path} --weight {pretrained_model_path} --name {exp_name} --hyp {hyp_path} --project {project_name} --entity {entity_name} --adam
+```
+
+example
+``` shell
+python train.py --workers 8 --device 0 --epochs 100 --batch-size 8 --data data/coco.yaml --img 640 640 --cfg cfg/training/yolov7x.yaml --weight seok-test/first_yolov7x/weights/last.pt --name first_yolov7x_cosine_lr --hyp data/hyp.scratch.custom.yaml --project 'seok-test' --entity 'cv12' --adam
+```
+
+## Official YOLOv7 github
+https://github.com/WongKinYiu/yolov7
+
 # Official YOLOv7
 
 Implementation of paper - [YOLOv7: Trainable bag-of-freebies sets new state-of-the-art for real-time object detectors](https://arxiv.org/abs/2207.02696)
