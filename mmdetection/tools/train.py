@@ -7,6 +7,7 @@ import time
 import warnings
 from pathlib import Path
 import sys
+import glob
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 import mmcv
@@ -180,6 +181,9 @@ def main():
         cfg.gpu_ids = range(world_size)
 
     # create work_dir
+    if os.path.exists(cfg.work_dir):
+        cfg.work_dir += '_' + str(len(glob.glob(cfg.work_dir+'*')) + 1)
+        
     mmcv.mkdir_or_exist(osp.abspath(cfg.work_dir))
     # dump config
     cfg.dump(osp.join(cfg.work_dir, osp.basename(args.config)))

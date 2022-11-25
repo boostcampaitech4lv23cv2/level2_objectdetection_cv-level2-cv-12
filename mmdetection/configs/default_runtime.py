@@ -1,8 +1,3 @@
-checkpoint_config = dict(interval=1) # 1에폭에 한번 저장
-
-# yapf:disable
-
-# yapf:enable
 custom_hooks = [dict(type='NumClassCheckHook')]
 
 dist_params = dict(backend='nccl')

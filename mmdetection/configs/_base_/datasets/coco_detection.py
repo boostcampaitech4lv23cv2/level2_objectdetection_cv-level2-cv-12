@@ -3,7 +3,6 @@ dataset_type = 'CocoDataset'
 
 image_data_root = '/opt/ml/dataset'
 annotation_data_root = '/opt/ml/dataset/kfold/seed41/'
-pseudo_data_root = '/opt/ml/dataset/pseudo.json'
 
 img_norm_cfg = dict(
     mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375], to_rgb=True)
@@ -40,21 +39,20 @@ data = dict(
     workers_per_gpu=2,
     train=dict(
         type=dataset_type,
-        ann_file=[annotation_data_root + 'train_0.json', 
-                  pseudo_data_root],
+        ann_file=annotation_data_root + 'train_4.json',
         img_prefix=image_data_root,
         classes=classes,
         pipeline=train_pipeline),
     val=dict(
         type=dataset_type,
-        ann_file=annotation_data_root + 'val_0.json',
+        ann_file=annotation_data_root + 'val_4.json',
         img_prefix=image_data_root,
         classes=classes,
         pipeline=test_pipeline),
     test=dict(
         type=dataset_type,
-        ann_file=annotation_data_root + 'test.json',
+        ann_file=image_data_root + 'test.json',
         img_prefix=image_data_root,
         classes=classes,
         pipeline=test_pipeline))
-evaluation = dict(interval=1, metric='bbox', classwise=True, )
+evaluation = dict(interval=1, metric='bbox', classwise=True, save_best='mAP@50')
