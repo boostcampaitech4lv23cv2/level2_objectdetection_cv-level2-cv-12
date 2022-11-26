@@ -28,7 +28,7 @@ image_data_root = '/opt/ml/dataset'
 annotation_data_root = '/opt/ml/dataset/kfold/seed41/'
 
 # https://github.com/open-mmlab/mmdetection/tree/master/configs/yolox
-load_from = '/opt/ml/level2_objectdetection_cv-level2-cv-12/work_dirs/yolox_s_8x8_300e_coco_20211121_095711-4592a793.pth'
+load_from = '/opt/ml/level2_objectdetection_cv-level2-cv-12/work_dirs/pretrained/yolox_s_8x8_300e_coco_20211121_095711-4592a793.pth'
 
 
 classes = ("General trash", "Paper", "Paper pack", "Metal", "Glass", 
@@ -131,12 +131,12 @@ data = dict(
 # optimizer
 # default 8 gpu
 optimizer = dict(
-    type='Adam',
-    #type='SGD',
+    #type='Adam',
+    type='SGD',
     lr=0.001,
     weight_decay=5e-4,
-    #momentum=0.9,
-    #nesterov=True,
+    momentum=0.9,
+    nesterov=True,
     paramwise_cfg=dict(norm_decay_mult=0., bias_decay_mult=0.))
 optimizer_config = dict(grad_clip=None)
 
