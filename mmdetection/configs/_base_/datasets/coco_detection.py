@@ -39,13 +39,13 @@ data = dict(
     workers_per_gpu=2,
     train=dict(
         type=dataset_type,
-        ann_file=annotation_data_root + 'train_0.json',
+        ann_file=annotation_data_root + 'train_4.json',
         img_prefix=image_data_root,
         classes=classes,
         pipeline=train_pipeline),
     val=dict(
         type=dataset_type,
-        ann_file=annotation_data_root + 'val_0.json',
+        ann_file=annotation_data_root + 'val_4.json',
         img_prefix=image_data_root,
         classes=classes,
         pipeline=test_pipeline),
@@ -55,4 +55,4 @@ data = dict(
         img_prefix=image_data_root,
         classes=classes,
         pipeline=test_pipeline))
-evaluation = dict(interval=1, metric='bbox', classwise=True, )
+evaluation = dict(interval=1, metric='bbox', classwise=True, save_best='bbox_mAP_50', greater_keys=['bbox_mAP_50'])  # save_best='auto', # 'less' -> loss
