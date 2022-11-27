@@ -42,7 +42,7 @@ data = dict(
         type='MultiImageMixDataset',
         dataset=dict(
             type=dataset_type,
-            ann_file=annotation_data_root + 'train_0.json',
+            ann_file=annotation_data_root + 'train_4.json',
             img_prefix=image_data_root,
             classes=classes,
             pipeline=[
@@ -53,7 +53,7 @@ data = dict(
         ),
     val=dict(
         type=dataset_type,
-        ann_file=annotation_data_root + 'val_0.json',
+        ann_file=annotation_data_root + 'val_4.json',
         img_prefix=image_data_root,
         classes=classes,
         pipeline=test_pipeline),
