@@ -1,14 +1,6 @@
 # checkpoint_config = dict(interval=1) # 1에폭에 한번 저장
 
 checkpoint_config = dict(interval=-1) # 매 epoch 저장 X
-evaluation = dict(
-    save_best='bbox_mAP_50',
-    greater_keys=['bbox_mAP_50'],
-    interval=1,
-    classwise=True,
-    metric='bbox')
-
-custom_hooks = [dict(type='NumClassCheckHook')]
 
 dist_params = dict(backend='nccl')
 log_level = 'INFO'
