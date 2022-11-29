@@ -163,8 +163,9 @@ test_pipeline = [
 ]
 
 data = dict(train=dict(pipeline=train_pipeline),
-            val=dict(pipeline=test_pipeline),
-            test=dict(pipeline=test_pipeline))
+            # val=dict(pipeline=test_pipeline),
+            test=dict(pipeline=test_pipeline)
+            )
 
 learning_rate = 1e-4
 optimizer = dict(_delete_=True, type='AdamW', lr=learning_rate, betas=(0.9, 0.999), weight_decay=0.05,
