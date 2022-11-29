@@ -21,6 +21,7 @@ test_pipeline = [
     dict(
         type='MultiScaleFlipAug',
         img_scale=(512, 512),
+        #img_scale=[(512, 512), (256, 256)],
         flip=False,
         transforms=[
             dict(type='Resize', keep_ratio=True),
@@ -39,20 +40,20 @@ data = dict(
     workers_per_gpu=2,
     train=dict(
         type=dataset_type,
-        ann_file=annotation_data_root + 'train_0.json',
+        ann_file=annotation_data_root + 'train_4.json',
         img_prefix=image_data_root,
         classes=classes,
         pipeline=train_pipeline),
     val=dict(
         type=dataset_type,
-        ann_file=annotation_data_root + 'val_0.json',
+        ann_file=annotation_data_root + 'val_4.json',
         img_prefix=image_data_root,
         classes=classes,
         pipeline=test_pipeline),
     test=dict(
         type=dataset_type,
-        ann_file=annotation_data_root + 'test.json',
+        ann_file=image_data_root + 'test.json',
         img_prefix=image_data_root,
         classes=classes,
         pipeline=test_pipeline))
-evaluation = dict(interval=1, metric='bbox', classwise=True, )
+evaluation = dict(interval=1, metric='bbox', classwise=True) # iou_thrs는 classwise에 적용이 안됨 <- 변경 불가
