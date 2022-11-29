@@ -56,4 +56,4 @@ data = dict(
         img_prefix=image_data_root,
         classes=classes,
         pipeline=test_pipeline))
-evaluation = dict(interval=1, metric='bbox', classwise=True, save_best='mAP@50')
+evaluation = dict(interval=1, metric='bbox', classwise=True, )
