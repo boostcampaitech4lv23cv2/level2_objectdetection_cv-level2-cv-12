@@ -1,21 +1,26 @@
 # model settings
 model = dict(
     type='CascadeRCNN',
-    pretrained='torchvision://resnet50',
+    pretrained=None,
     backbone=dict(
-        type='ResNet',
-        depth=50,
-        num_stages=4,
+        type='SwinTransformer',
+        embed_dim=96,
+        depths=[2, 2, 6, 2],
+        num_heads=[3, 6, 12, 24],
+        window_size=7,
+        mlp_ratio=4.,
+        qkv_bias=True,
+        qk_scale=None,
+        drop_rate=0.,
+        attn_drop_rate=0.,
+        drop_path_rate=0.2,
+        # ape=False,
+        patch_norm=True,
         out_indices=(0, 1, 2, 3),
-        frozen_stages=1,
-        norm_cfg=dict(type='BN', requires_grad=True),
-        norm_eval=True,
-        style='pytorch',
-        # init_cfg=dict(type='Pretrained', checkpoint='torchvision://resnet50')
-        ),
+        use_checkpoint=False),
     neck=dict(
         type='FPN',
-        in_channels=[256, 512, 1024, 2048],
+        in_channels=[96, 192, 384, 768],
         out_channels=256,
         num_outs=5),
     rpn_head=dict(
@@ -96,7 +101,7 @@ model = dict(
                 loss_bbox=dict(type='SmoothL1Loss', beta=1.0, loss_weight=1.0))
         ]),
     # model training and testing settings
-    train_cfg=dict(
+    train_cfg = dict(
         rpn=dict(
             assigner=dict(
                 type='MaxIoUAssigner',
@@ -115,7 +120,9 @@ model = dict(
             pos_weight=-1,
             debug=False),
         rpn_proposal=dict(
+            nms_across_levels=False,
             nms_pre=2000,
+            nms_post=2000,
             max_per_img=2000,
             nms=dict(type='nms', iou_threshold=0.7),
             min_bbox_size=0),
@@ -169,13 +176,16 @@ model = dict(
                 pos_weight=-1,
                 debug=False)
         ]),
-    test_cfg=dict(
+    test_cfg = dict(
         rpn=dict(
+            nms_across_levels=False,
             nms_pre=1000,
+            nms_post=1000,
             max_per_img=1000,
             nms=dict(type='nms', iou_threshold=0.7),
             min_bbox_size=0),
         rcnn=dict(
             score_thr=0.05,
             nms=dict(type='nms', iou_threshold=0.5),
-            max_per_img=100)))
+            max_per_img=100,
+            )))
