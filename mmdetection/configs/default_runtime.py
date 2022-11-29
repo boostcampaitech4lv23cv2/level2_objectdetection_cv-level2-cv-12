@@ -1,4 +1,5 @@
-checkpoint_config = dict(interval=1) # 1에폭에 한번 저장
+# checkpoint_config = dict(interval=1) # 1에폭에 한번 저장
+checkpoint_config = dict(interval=-1) # 매 epoch 저장 X
 
 custom_hooks = [dict(type='NumClassCheckHook')]
 
