@@ -20,8 +20,8 @@ model = dict(
     train_cfg=dict(assigner=dict(type='SimOTAAssigner', center_radius=2.5)),
     # In order to align the source code, the threshold of the val phase is
     # 0.01, and the threshold of the test phase is 0.001.
-    # test_cfg=dict(score_thr=0.01, nms=dict(type='nms', iou_threshold=0.65))
-    test_cfg=dict(score_thr=0.01, nms=dict(type='soft_nms', iou_threshold=0.65))
+    test_cfg=dict(score_thr=0.01, nms=dict(type='nms', iou_threshold=0.65))
+    #test_cfg=dict(score_thr=0.01, nms=dict(type='soft_nms', iou_threshold=0.65))
     )
 
 # dataset settings
@@ -41,7 +41,7 @@ train_pipeline = [
     dict(
         type='RandomAffine',
         scaling_ratio_range=(0.1, 1.5), # Min and max ratio of scaling transform
-        border=(-img_scale[0] // 2, -img_scale[1] // 2) # Distance from height and width sides of input image to adjust output shape, Only used in mosaic dataset
+        border=(-img_scale[0] // 2, -img_scale[1] // 2), # Distance from height and width sides of input image to adjust output shape, Only used in mosaic dataset
         ), 
     # dict(
     #     type='MixUp',
@@ -84,6 +84,7 @@ test_pipeline = [
     dict(type='LoadImageFromFile'),
     dict(
         type='MultiScaleFlipAug',
+        #img_scale=([128,128],[384,384],[640,640],[960,960]),
         img_scale=img_scale,
         flip=False,
         transforms=[
