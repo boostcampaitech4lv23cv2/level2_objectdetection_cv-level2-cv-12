@@ -1,4 +1,5 @@
-checkpoint_config = dict(interval=1) # 1에폭에 한번 저장
+#checkpoint_config = dict(interval=1) # 1에폭에 한번 저장
+checkpoint_config = dict(interval=-1) # 매 epoch 저장 X # best score만 저장하기
 
 # yapf:disable
 
