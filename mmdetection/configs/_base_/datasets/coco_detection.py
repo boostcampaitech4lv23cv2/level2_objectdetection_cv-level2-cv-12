@@ -56,4 +56,4 @@ data = dict(
         img_prefix=image_data_root,
         classes=classes,
         pipeline=test_pipeline))
-evaluation = dict(interval=1, metric='bbox', classwise=True) # iou_thrs는 classwise에 적용이 안됨 <- 변경 불가
+# evaluation = dict(interval=1, metric='bbox', classwise=True) # iou_thrs는 classwise에 적용이 안됨 <- 변경 불가
