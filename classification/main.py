@@ -34,14 +34,14 @@ if __name__ == "__main__":
     parser.add_argument("--weight_decay", type=float, default=1e-10)
     parser.add_argument("--batch_size", type=int, default=8)
 
-    parser.add_argument("--backbone_name", type=str, default="efficientnet_b2")
+    parser.add_argument("--backbone_name", type=str, default="efficientnet_b3")
 
     parser.add_argument("--save_dir", type=str, default="/opt/ml/level2_objectdetection_cv-level2-cv-12/classification/work_dirs")
     parser.add_argument("--project_name", type=str, default="classification")
     parser.add_argument(
         "--experiment_name",
         type=str,
-        default="efficientnet_b2",
+        default="efficientnet_b3",
     )
     parser.add_argument("--image_scale", type=tuple, default=(1024, 1024))
     
@@ -78,11 +78,8 @@ if __name__ == "__main__":
         lr=args.lr,
         weight_decay=args.weight_decay,
     )
-    # optimizer = SGD(
-    #     [param for param in model.parameters() if param.requires_grad],
-    #     lr=base_lr, weight_decay=1e-4, momentum=0.9)
 
-    scheduler = StepLR(optimizer, step_size=10, gamma=0.5)
+    scheduler = StepLR(optimizer, step_size=10, gamma=0.1)
     # scheduler = CosineAnnealingLR(optimizer, eta_min=args.lr*0.1, T_max=10)
 
     best_epoch, best_score = 0, 0
@@ -92,6 +89,7 @@ if __name__ == "__main__":
         
         losses = []
         model.train()
+        # for img, label in train_loader:
         for img, label in tqdm(train_loader):
             img, label = img.cuda(), label.float().cuda()
             
@@ -116,7 +114,7 @@ if __name__ == "__main__":
         val_losses = []
         model.eval()
         with torch.no_grad():
-            #for img, label in tqdm(val_loader):
+            #for img, label in val_loader:
             for img, label in tqdm(val_loader):
                 img, label = img.cuda(), label.float().cuda()
                 pred = model(img).sigmoid()

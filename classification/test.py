@@ -17,20 +17,20 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--n_workers", type=int, default=2)
-    parser.add_argument("--batch_size", type=int, default=2)
+    parser.add_argument("--batch_size", type=int, default=8)
 
-    parser.add_argument("--backbone_name", type=str, default="efficientnet_b0")
+    parser.add_argument("--backbone_name", type=str, default="efficientnet_b2")
     parser.add_argument("--checkpoint_path", type=str, default="/opt/ml/level2_objectdetection_cv-level2-cv-12/classification/work_dirs/classification/efficientnet_b2/best_model.pth")
-    parser.add_argument("--result_csv", type=str, default="/opt/ml/level2_objectdetection_cv-level2-cv-12/classification/work_dirs/classification/efficientnet_b2/test_class.csv")
+    parser.add_argument("--result_csv", type=str, default="/opt/ml/level2_objectdetection_cv-level2-cv-12/classification/work_dirs/classification/efficientnet_b2/val_class.csv")
 
     parser.add_argument("--image_scale", type=tuple, default=(1024, 1024))
     args = parser.parse_args()
     set_seed(args.seed)
-    use_cuda = False
+    use_cuda = True
     device = torch.device("cuda" if use_cuda else "cpu")
 
     test_transform = build_transform(args=args, phase="test", image_scale=args.image_scale)
-    test_dataset = CustomDataset(gt_path='/opt/ml/dataset/test.json', transform=test_transform, phase="test")
+    test_dataset = CustomDataset(gt_path='/opt/ml/dataset/kfold/seed41/val_4.json', transform=test_transform, phase="test")
     test_loader = DataLoader(test_dataset,batch_size=args.batch_size,shuffle=False,num_workers=args.n_workers)
 
     model = CustomModel(args).to(device)
