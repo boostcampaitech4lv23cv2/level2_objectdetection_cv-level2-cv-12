@@ -95,6 +95,7 @@ class WandbLogger():
             self.wandb_run = wandb.init(config=opt,
                                         resume="allow",
                                         project='YOLOR' if opt.project == 'runs/train' else Path(opt.project).stem,
+                                        entity=opt.entity,
                                         name=name,
                                         job_type=job_type,
                                         id=run_id) if not wandb.run else wandb.run
@@ -182,6 +183,7 @@ class WandbLogger():
             'epochs_trained': epoch + 1,
             'save period': opt.save_period,
             'project': opt.project,
+            'entity': opt.entity,
             'total_epochs': opt.epochs,
             'fitness_score': fitness_score
         })
