@@ -13,7 +13,7 @@ def set_seed(seed=42):
     torch.backends.cudnn.deterministic = True
 
 
-def build_transform(args=None, phase="train"):
+def build_transform(args=None, phase="train", image_scale=(512, 512)):
     mean=[123.675, 116.28, 103.53]
     std=[58.395, 57.12, 57.375]
     
@@ -21,7 +21,7 @@ def build_transform(args=None, phase="train"):
         train_transform = transforms.Compose(
             [
                 #transforms.RandomResizedCrop(size=512, scale=(0.2, 1.0)),
-                transforms.Resize(size=(512,512)),
+                transforms.Resize(size=image_scale),
                 transforms.RandomHorizontalFlip(),
                 transforms.ToTensor(),
                 transforms.Normalize(mean=mean, std=std),
@@ -30,7 +30,7 @@ def build_transform(args=None, phase="train"):
         val_transform = transforms.Compose(
             [
                 #transforms.RandomResizedCrop(size=512, scale=(0.2, 1.0)),
-                transforms.Resize(size=(512,512)),
+                transforms.Resize(size=image_scale),
                 transforms.RandomHorizontalFlip(),
                 transforms.ToTensor(),
                 transforms.Normalize(mean=mean, std=std),
@@ -41,7 +41,7 @@ def build_transform(args=None, phase="train"):
         test_transform = transforms.Compose(
             [
                 #transforms.RandomResizedCrop(size=512, scale=(0.2, 1.0)),
-                transforms.Resize(size=(512,512)),
+                transforms.Resize(size=image_scale),
                 transforms.RandomHorizontalFlip(),
                 transforms.ToTensor(),
                 transforms.Normalize(mean=mean, std=std),

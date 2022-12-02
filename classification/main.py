@@ -8,7 +8,6 @@ import wandb
 from tqdm import tqdm
 import numpy as np
 import pandas as pd
-#from sklearn.model_selection import train_test_split
 from sklearn.metrics import roc_auc_score
 
 import torch
@@ -21,54 +20,50 @@ import torch.nn.functional as F
 
 from dataset import CustomDataset
 from model import CustomModel
-from utils import *
-
-# from timm.scheduler.step_lr import StepLRScheduler
-#from metric import accuracy, macro_f1
-
-#from process import train, validation
-#from loss import MultitaskLoss, create_criterion
-
+from utils import set_seed, build_transform
+import glob
+import json
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--seed", type=int, default=42)
-    #parser.add_argument("--val_ratio", type=float, default=0.3)  # train-val slit ratio
-    #parser.add_argument("--split_option", type=str, default="different")  # different or none
-    #parser.add_argument("--stratify", type=bool, default=True)
-    #parser.add_argument("--wrs", type=bool, default=True)
-    #parser.add_argument("--age_normalized", type=str, default="normal") # normal or minmax for regression
     parser.add_argument("--n_workers", type=int, default=2)
 
-    parser.add_argument("--num_epochs", type=int, default=50)
-    parser.add_argument("--lr", type=float, default=0.01)
-    parser.add_argument("--weight_decay", type=float, default=1e-4)
+    parser.add_argument("--num_epochs", type=int, default=30)
+    parser.add_argument("--lr", type=float, default=1e-5)
+    parser.add_argument("--weight_decay", type=float, default=1e-10)
     parser.add_argument("--batch_size", type=int, default=8)
 
-    parser.add_argument("--backbone_name", type=str, default="efficientnet_b0")
-    #parser.add_argument("--activation_head", type=bool, default=False) # actviation for age head
-    #parser.add_argument("--dropout", type=float, default=0.2)
+    parser.add_argument("--backbone_name", type=str, default="efficientnet_b3")
 
-    #parser.add_argument("--train_dir", type=str, default="/opt/ml/input/data/train")
     parser.add_argument("--save_dir", type=str, default="/opt/ml/level2_objectdetection_cv-level2-cv-12/classification/work_dirs")
     parser.add_argument("--project_name", type=str, default="classification")
     parser.add_argument(
         "--experiment_name",
         type=str,
-        default="efficientnet_b0",
+        default="efficientnet_b3",
     )
+    parser.add_argument("--image_scale", type=tuple, default=(1024, 1024))
     
     args = parser.parse_args()
+    
     set_seed(args.seed)
 
     save_path = os.path.join(
         args.save_dir, args.project_name, args.experiment_name
     )
+    
+    if os.path.exists(save_path):
+        save_path += '_' + str(len(glob.glob(save_path+'*')) + 1)
+    
     wandb.init(project=args.project_name, name=args.experiment_name, entity="cv12")
     wandb.config.update(args)
     os.makedirs(save_path, exist_ok=True)
 
-    train_transform, val_transform = build_transform(args=args, phase="train")
+    with open(f'{save_path}/config.json', 'w') as file:
+        json.dump(vars(args), file, ensure_ascii=False, indent=4)
+
+    train_transform, val_transform = build_transform(args=args, phase="train", image_scale=args.image_scale)
     train_dataset = CustomDataset(gt_path='/opt/ml/dataset/kfold/seed41/train_4.json', transform=train_transform)
     val_dataset = CustomDataset(gt_path='/opt/ml/dataset/kfold/seed41/val_4.json', transform=val_transform)
 
@@ -83,27 +78,28 @@ if __name__ == "__main__":
         lr=args.lr,
         weight_decay=args.weight_decay,
     )
-    # optimizer = SGD(
-    #     [param for param in model.parameters() if param.requires_grad],
-    #     lr=base_lr, weight_decay=1e-4, momentum=0.9)
 
-    # scheduler = StepLR(optimizer, step_size=10, gamma=0.1)
-    scheduler = CosineAnnealingLR(optimizer, eta_min=args.lr*0.01, T_max=10)
+    scheduler = StepLR(optimizer, step_size=10, gamma=0.1)
+    # scheduler = CosineAnnealingLR(optimizer, eta_min=args.lr*0.1, T_max=10)
 
     best_epoch, best_score = 0, 0
     for epoch in range(1, args.num_epochs + 1):
         print("\n### epoch {} ###".format(epoch))
         info, time = defaultdict(int), datetime.now()
+        
+        losses = []
         model.train()
-        for img, label in train_loader:
+        # for img, label in train_loader:
+        for img, label in tqdm(train_loader):
             img, label = img.cuda(), label.float().cuda()
-            pred = model(img).sigmoid()
-
-            loss = loss_fn(pred,label)
+            
             optimizer.zero_grad()
+            pred = model(img).sigmoid()
+            loss = loss_fn(pred,label)
             loss.backward()
             optimizer.step()
-            info["train_total_loss"] += loss.item() / len(train_loader)
+            losses.append(loss.item())
+        info["train_total_loss"] = np.mean(losses)
     
         elapsed = datetime.now() - time
         info["epoch"] = epoch
@@ -115,17 +111,19 @@ if __name__ == "__main__":
         ### validation ###
         preds, labels = torch.tensor([]), torch.tensor([])
         info, time = defaultdict(int), datetime.now()
+        val_losses = []
         model.eval()
         with torch.no_grad():
-            #for img, label in tqdm(val_loader):
-            for img, label in val_loader:
+            #for img, label in val_loader:
+            for img, label in tqdm(val_loader):
                 img, label = img.cuda(), label.float().cuda()
                 pred = model(img).sigmoid()
                 loss = loss_fn(pred,label)
                 preds = torch.cat((preds, pred.cpu()))
                 labels = torch.cat((labels, label.cpu()))
-                info["val_total_loss"] += loss.item() / len(val_loader)
-
+                val_losses.append(loss.item())
+            info["val_total_loss"] = np.mean(val_losses)
+            
             info["epoch"] = epoch
             all_auc = roc_auc_score(labels.tolist(), preds.tolist(),average=None)
             info["auc"] =sum(all_auc)/len(all_auc)
