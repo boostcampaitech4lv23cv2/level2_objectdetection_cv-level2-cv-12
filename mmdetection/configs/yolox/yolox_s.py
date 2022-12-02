@@ -69,7 +69,7 @@ train_dataset = dict(
     type='MultiImageMixDataset',
     dataset=dict(
         type=dataset_type,
-        ann_file=annotation_data_root + 'train_4.json',
+        ann_file=[annotation_data_root + 'train_4.json','/opt/ml/dataset/pseudo_yolox.json'],
         img_prefix=image_data_root,
         pipeline=[
             dict(type='LoadImageFromFile'),
@@ -116,7 +116,7 @@ test_pipeline = [
 #         pipeline=test_pipeline))
 
 data = dict(
-    samples_per_gpu=4,
+    samples_per_gpu=8,
     workers_per_gpu=4,
     train=train_dataset,
     val=dict(

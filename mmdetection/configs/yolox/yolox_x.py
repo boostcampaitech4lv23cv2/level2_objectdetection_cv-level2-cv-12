@@ -1,6 +1,7 @@
 _base_ = './yolox_s.py'
 
-load_from = '/opt/ml/level2_objectdetection_cv-level2-cv-12/work_dirs/pretrained/yolox_x_8x8_300e_coco_20211126_140254-1ef88d67.pth'
+#load_from = '/opt/ml/level2_objectdetection_cv-level2-cv-12/work_dirs/pretrained/yolox_x_8x8_300e_coco_20211126_140254-1ef88d67.pth'
+load_from = '/opt/ml/level2_objectdetection_cv-level2-cv-12/work_dirs/inseo_test/yolox_x(scaling+soft nms)/best_bbox_mAP_50_epoch_42.pth'
 
 # model settings
 model = dict(
